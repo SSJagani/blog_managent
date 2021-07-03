@@ -1,0 +1,49 @@
+{% extends 'home/header.html' %}
+
+{% block title%} Blog Home Page {% endblock%}
+
+{% block blogactive %} active {% endblock blogactive %}
+
+{% block body%} 
+<div class="container my-5">
+	<div class="row">
+		<h3><b>Coding Blog Post By Icoder</b></h3>	
+	</div>
+</div>
+<hr>
+<div class="container my-4">
+{% for post in allpost %}
+      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class=" p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">Article By {{post.autore_name}} (<span style="color: #000">{{post.views}} View</span>)</strong>
+          <h3 class="mb-0">{{ post.title}}</h3>
+          <div class="mb-1 text-muted">{{ post.pub_date}}</div>
+          <p class="card-text mb-auto">
+          <div class="priview">
+          {{ post.desc|safe | truncatechars:400 }}
+          </div>
+        </p>
+          <div class="my-2">
+          <a href="/blog/{{post.slug}}" role="button" class="btn btn-primary">Continue reading</a>
+      	</div>
+        </div>
+        <!-- <div class="col-auto d-none d-lg-block">
+          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+        </div> -->
+    </div>
+{% endfor %}
+</div>
+
+{% endblock%}
+
+
+{% block js%} 
+
+<script>
+  let priview = document.getElementsByClassName('priview');
+  Array.from(priview).forEach((element)=>{
+    element.innerHTML = element.innerText;
+  })
+</script>
+
+{% endblock%}

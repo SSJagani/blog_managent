@@ -1,0 +1,86 @@
+{% extends 'Home/header.html' %}
+
+{% block title%} Blogpost Page {% endblock%}
+
+{% block blogactive %} active {% endblock blogactive %}
+{% load static %}
+{% load humanize %}
+{% load extras %}
+{% block body%} 
+ <div class="container my-4">
+ 	<div class="blog-post">
+        <h2 class="blog-post-title"><strong>{{ post.title }}</strong></h2>
+        <p class="blog-post-meta">{{ post.pub_date }} by <a href="#">{{ post.autore_name }}</a> (<span>{{post.views}} View</span>)</p>
+
+        <p> {{ post.desc|safe }} </p>
+      </div>
+
+      <hr>
+      <div class="container">
+      <h3>Comments [{{ comments|length }}]</h3>
+      {% if udata %}
+      	<form action="/blog/postComment" method="post"> {% csrf_token %}
+      		<label for="inputPassword5">Enter Comment:</label>
+			<input type="text" id="comment" name="comment" class="form-control mb-2" placeholder="Enter the Comment here.">
+      		<input type="hidden" name="post_srno" id="post_srno" value="{{post.post_id}}">
+      		<input type="hidden" name="comment_srno" id="comment_srno" value="">
+      		<button type="submit" class="btn btn-primary">Submit</button>
+      	</form>
+      {% else %}
+      		<div class="container">
+      			<strong>If You Want to Add Comment This Post,First Login Then Comment..</strong>
+      		</div>
+      		<hr>
+      {% endif %}
+      	{% for comment in comments %}
+
+      		<div class="media my-2">
+			  <img src="/static/img/person.jpg" class="mr-3"  style="width: 44px" alt="noimage">
+			  <div class="media-body">
+			  	<div class="mt-0" > <strong>{{comment.user}} </strong><span class="badge badge-secondary"> {{ comment.timestamp | naturaltime }}</span></div> 
+			    <p &nbsp;> {{comment.comment}}</p>
+			    <div class="replay mx-0">
+			    	{% if udata %}
+			    	<p>
+			  <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#replybox{{comment.sr_no}}" aria-expanded="false" aria-controls="replybox{{comment.sr_no}}">
+    Add Reply
+  </button>
+</p>
+{% else %}
+<p>
+			  <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#replybox{{comment.sr_no}}" aria-expanded="false" aria-controls="replybox{{comment.sr_no}}" disabled="">
+    Login For Reply
+  </button></p>
+{% endif %}
+<div class="collapse" id="replybox{{comment.sr_no}}">
+  <div class="card card-body">
+    <form action="/blog/postComment" method="post"> {% csrf_token %}
+      		<label for="inputPassword5">Reply Comment:</label>
+			<input type="text" id="comment" name="comment" class="form-control mb-2" placeholder="Enter the Comment here.">
+      		<input type="hidden" name="post_srno" id="post_srno" value="{{post.post_id}}">
+      		<input type="hidden" name="comment_srno" id="comment_srno" value="{{comment.sr_no}}">
+      		<button type="submit" class="btn btn-primary">Submit</button>
+      	</form>
+  </div>
+</div>
+{% for r_comment in reply_comment|get_val:comment.sr_no %}
+<div class="row mx-0 my-2">
+	<img src="/static/img/person.jpg" class="mr-3"  style="width: 30px;height: 44px;" alt="noimage">
+			  <div class="media-body">
+			  	<div class="mt-0" > <strong>{{r_comment.user}} </strong><span class="badge badge-secondary"> {{ r_comment.timestamp | naturaltime }}</span></div> 
+			    <p &nbsp;> {{r_comment.comment}}</p>
+</div>
+			    </div>
+			    {% endfor %}
+			  </div>
+			</div>
+			  
+
+      </div>
+      	{% endfor %}
+ 	
+ </div>
+{% endblock%}
+
+
+{% block js%} {% endblock%}

@@ -1,0 +1,46 @@
+{% extends 'home/header.html' %}
+
+{% block title%} Home Page {% endblock%}
+
+{% block blogactive %} active {% endblock blogactive %}
+
+{% block body%} 
+<div class="container my-5">
+	<div class="row">
+		<h3>You Search Result:</h3>	
+	</div>
+</div>
+<hr>
+<div class="container my-4">
+{% for post in allpost %}
+      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class=" p-4 d-flex flex-column position-static">
+          <!-- <strong class="d-inline-block mb-2 text-primary">World</strong> -->
+          <h3 class="mb-0">{{ post.title}}</h3>
+          <div class="mb-1 text-muted">{{ post.pub_date}}</div>
+          <p class="card-text mb-auto">{{ post.desc | truncatechars:300}}</p>
+          <div class="my-2">
+          <a href="/blog/{{post.slug}}" role="button" class="btn btn-primary">Continue reading</a>
+      	</div>
+        </div>
+        <!-- <div class="col-auto d-none d-lg-block">
+          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+        </div> -->
+    </div>
+{% endfor %}
+{% if data %}
+    <div class="med card-section">
+      <p aria-level="3" role="heading" style="padding-top:.33em">Your search - <em><b>{{ data }}</b></em> - did not match any documents.</p>
+      <p style="margin-top:1em">Suggestions:</p>
+      <ul style="margin-left:1.3em;margin-bottom:2em">
+        <li>Try different keywords.</li>
+      </ul>
+    </div>
+{% endif %}
+
+</div>
+
+{% endblock%}
+
+
+{% block js%} {% endblock%}
